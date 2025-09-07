@@ -286,9 +286,9 @@ def show_main_menu(number, balance, balance_expired_at):
         info = Table.grid(padding=(0, 2))
         info.add_column(justify="right", style=_c("text_sub"))
         info.add_column(style=_c("text_body"))
-        info.add_row("Nomor", f"[{_c('text_value')}]{phone_number}[/]")
-        info.add_row("Pulsa", f"[{_c('text_money')}]Rp {remaining_balance:,}[/]")
-        info.add_row("Masa aktif", f"[{_c('text_date')}]{expired_at_dt}[/]")
+        info.add_row("Nomor:", f"[{_c('text_value')}]{phone_number}[/]")
+        info.add_row("Sisa Pulsa:", f"[{_c('text_money')}]Rp {remaining_balance:,}[/]")
+        info.add_row("Masa aktif:", f"[{_c('text_date')}]{expired_at_dt}[/]")
         _print_centered_panel(info, title=f"[{_c('text_title')}]Informasi Akun[/]", border_style=_c("border_info"))
 
         menu = Table(show_header=False, box=ROUNDED, padding=(0,1), expand=True)
@@ -301,7 +301,8 @@ def show_main_menu(number, balance, balance_expired_at):
         menu.add_row("[bold]5[/]", "Dor Paket Lainnya..")
         menu.add_row("[bold]6[/]", "Input Family Code Sendiri")
         menu.add_row("[bold]7[/]", f"[{_c('text_sub')}]Ganti Tema[/]")
-        menu.add_row("[bold]99[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
+        menu.add_row("[bold]x[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
+        menu.add_row("[bold]X[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
         _print_centered_panel(menu, title=f"[{_c('text_title')}]Menu[/]", border_style=_c("border_primary"))
     else:
         print("--------------------------")
@@ -318,7 +319,7 @@ def show_main_menu(number, balance, balance_expired_at):
         print("5. Dor Paket Lainnya..")
         print("6. Input Family Code Sendiri")
         print("7. Ganti Tema")
-        print("99. Tutup aplikasi")
+        print("x. Tutup aplikasi")
         print("--------------------------")
 
 # ========= Menu Ganti Tema =========
@@ -467,7 +468,7 @@ def show_login_menu():
         menu.add_column("desc", style=_c("text_body"))
         menu.add_row("[bold]1[/]", "Request OTP")
         menu.add_row("[bold]2[/]", "Submit OTP")
-        menu.add_row("[bold]99[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
+        menu.add_row("[bold]x[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
         _print_centered_panel(menu, title=f"[{_c('text_title')}]Login ke MyXL[/]", border_style=_c("border_info"))
     else:
         print("--------------------------")
@@ -475,7 +476,7 @@ def show_login_menu():
         print("--------------------------")
         print("1. Request OTP")
         print("2. Submit OTP")
-        print("99. Tutup aplikasi")
+        print("x. Tutup aplikasi")
         print("--------------------------")
 
 # ========= Login Prompt =========
@@ -561,11 +562,11 @@ def show_package_menu(packages):
             print("--------------------------")
             for pkg in packages:
                 print(f"{pkg['number']}. {pkg['name']} - Rp {pkg['price']}")
-            print("99. Kembali ke menu utama")
+            print("00. Kembali ke menu utama")
             print("--------------------------")
             pkg_choice = input("Pilih paket (nomor): ")
 
-        if pkg_choice == "99":
+        if pkg_choice == "00":
             in_package_menu = False
             return None
 
