@@ -396,7 +396,6 @@ def show_account_menu():
 Aers               , enumerate                    = andnumber_user"]
  active ()" if is_active else ""
                     print(f"{idx + 1}. {user['number']}{active_marker}")
-            print("Command:")
             print("0: Tambah Akun")
             print("00: Kembali ke menu utama")
             print("99: Hapus Akun aktif")
