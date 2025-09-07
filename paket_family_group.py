@@ -128,6 +128,7 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
         family_code = selected_family["code"]
         show_packages_by_family(api_key, tokens, family_code, perusahaan)
 
+#
 def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusahaan: str):
     packages = []
     data = get_family(api_key, tokens, family_code)
@@ -166,7 +167,7 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
                 header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
-            table.add_column("No", justify="right", style=_c("text_number"))  # mepet kanan garis
+            table.add_column("No", justify="right", style=_c("text_number"))
             table.add_column("Nama Paket", style=_c("text_body"))
             table.add_column("Harga", style=_c("text_money"))
         else:
@@ -189,10 +190,17 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
                     "price": option_price,
                     "code": option_code
                 })
+
+                # Format harga dengan koma ribuan
+                try:
+                    formatted_price = f"Rp {int(option_price):,}"
+                except (ValueError, TypeError):
+                    formatted_price = f"Rp {option_price}"  # fallback jika bukan angka
+
                 if RICH_OK:
-                    table.add_row(str(option_number), option_name, f"Rp {option_price}")
+                    table.add_row(str(option_number), option_name, formatted_price)
                 else:
-                    print(f"{option_number}. {option_name} - Rp {option_price}")
+                    print(f"{option_number}. {option_name} - {formatted_price}")
                 option_number += 1
 
         if RICH_OK:
@@ -236,5 +244,3 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
         if is_done:
             in_package_menu = False
             return
-
-# Untuk memulai menu, panggil: show_company_group_menu(api_key, tokens)
