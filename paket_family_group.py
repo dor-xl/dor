@@ -90,7 +90,7 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
                 title=f"[{_c('text_title')}]Family Code Group - {perusahaan}[/]", show_header=True,
                 header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
-            table.add_column("No", justify="right", style=_c("text_number"))  # mepet kanan garis
+            table.add_column("No", justify="right", style=_c("text_number"))
             table.add_column("Kategori", style=_c("text_body"))
             for key, value in families.items():
                 table.add_row(key, value['name'])
@@ -128,7 +128,6 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
         family_code = selected_family["code"]
         show_packages_by_family(api_key, tokens, family_code, perusahaan)
 
-#
 def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusahaan: str):
     packages = []
     data = get_family(api_key, tokens, family_code)
@@ -191,7 +190,6 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
                     "code": option_code
                 })
 
-                # Format harga dengan koma ribuan
                 try:
                     formatted_price = f"Rp {int(option_price):,}"
                 except (ValueError, TypeError):
@@ -204,7 +202,7 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
                 option_number += 1
 
         if RICH_OK:
-            table.add_row("99", f"[{_c('text_err')}]Kembali ke menu sebelumnya[/]", "")
+            table.add_row("00", f"[{_c('text_err')}]Kembali ke menu sebelumnya[/]", "")
             _print_full_width_panel(
                 table,
                 title=f"[{_c('text_title')}]Daftar Paket {perusahaan}[/]",
@@ -213,10 +211,10 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
             )
             pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)").strip()
         else:
-            print("99. Kembali ke menu sebelumnya")
+            print("00. Kembali ke menu sebelumnya")
             pkg_choice = input("Pilih paket (nomor): ").strip()
 
-        if pkg_choice == "99":
+        if pkg_choice == "00":
             in_package_menu = False
             return
 
