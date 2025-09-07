@@ -5,15 +5,14 @@ from ui import (
     pause,
     console,
     _c,
-    RICH_OK
+    RICH_OK,
+    _print_full_width_panel  # Pastikan helper panel sudah ada di ui.py
 )
 
 try:
     from rich.table import Table
-    from rich.panel import Panel
     from rich.prompt import Prompt
     from rich.align import Align
-    from rich.box import ROUNDED
 except ImportError:
     pass
 
@@ -43,20 +42,18 @@ def show_company_group_menu(api_key: str, tokens: dict):
         if RICH_OK:
             table = Table(
                 title=f"[{_c('text_title')}]Daftar Operator/Perusahaan[/]",
-                show_header=True, header_style=_c("text_sub"), box=ROUNDED
+                show_header=True, header_style=_c("text_sub"), box=None
             )
             table.add_column("No", style=_c("text_number"), width=4)
             table.add_column("Perusahaan/Operator", style=_c("text_body"))
             for idx, perusahaan in enumerate(keys, 1):
                 table.add_row(str(idx), perusahaan)
             table.add_row("99", f"[{_c('text_err')}]Kembali ke menu utama[/]")
-            panel = Panel(
-                Align.center(table),
+            _print_full_width_panel(
+                table,
                 title=f"[{_c('text_title')}]Pilih Operator[/]",
-                border_style=_c("border_primary"),
-                box=ROUNDED
+                border_style=_c("border_primary")
             )
-            console.print(panel)
             choice = Prompt.ask(f"[{_c('text_sub')}]Pilih operator (nomor)").strip()
         else:
             print("--------------------------")
@@ -91,20 +88,18 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
         if RICH_OK:
             table = Table(
                 title=f"[{_c('text_title')}]Family Code Group - {perusahaan}[/]", show_header=True,
-                header_style=_c("text_sub"), box=ROUNDED
+                header_style=_c("text_sub"), box=None
             )
             table.add_column("No", style=_c("text_number"), width=4)
             table.add_column("Kategori", style=_c("text_body"))
             for key, value in families.items():
                 table.add_row(key, value['name'])
             table.add_row("99", f"[{_c('text_err')}]Kembali ke menu operator[/]")
-            panel = Panel(
-                Align.center(table),
+            _print_full_width_panel(
+                table,
                 title=f"[{_c('text_title')}]Pilih Family Code {perusahaan}[/]",
-                border_style=_c("border_primary"),
-                box=ROUNDED
+                border_style=_c("border_primary")
             )
-            console.print(panel)
             choice = Prompt.ask(f"[{_c('text_sub')}]Pilih kategori (nomor)").strip()
         else:
             print("--------------------------")
@@ -161,10 +156,13 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
         family_name = package_family.get("name", "Tidak diketahui")
         if RICH_OK:
             panel_title = f"[{_c('text_title')}]Family Name ({perusahaan}):[/] [{_c('text_ok')}]{family_name}[/{_c('text_ok')}]"
-            console.print(Align.center(Panel(panel_title, style=_c("border_info"), box=ROUNDED)))
+            _print_full_width_panel(
+                panel_title,
+                border_style=_c("border_info")
+            )
             table = Table(
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
-                header_style=_c("text_sub"), box=ROUNDED
+                header_style=_c("text_sub"), box=None
             )
             table.add_column("No", style=_c("text_number"), width=4)
             table.add_column("Nama Paket", style=_c("text_body"))
@@ -197,13 +195,11 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
 
         if RICH_OK:
             table.add_row("99", f"[{_c('text_err')}]Kembali ke menu sebelumnya[/]", "")
-            panel = Panel(
-                Align.center(table),
+            _print_full_width_panel(
+                table,
                 title=f"[{_c('text_title')}]Daftar Paket {perusahaan}[/]",
-                border_style=_c("border_info"),
-                box=ROUNDED
+                border_style=_c("border_info")
             )
-            console.print(panel)
             pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)").strip()
         else:
             print("99. Kembali ke menu sebelumnya")
