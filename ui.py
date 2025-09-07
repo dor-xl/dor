@@ -298,7 +298,61 @@ def show_main_menu(number, balance, balance_expired_at):
         print("99. Tutup aplikasi")
         print("--------------------------")
 
-# ... (menu tema, akun, login dll TIDAK BERUBAH)
+# ... menu tema, akun, login dll TIDAK BERUBAH
+
+def show_package_menu(packages):
+    api_key = AuthInstance.api_key
+    tokens = AuthInstance.get_active_tokens()
+    if not tokens:
+        _print_centered_panel("No active user tokens found.", border_style=_c("border_error"))
+        pause()
+        return None
+
+    in_package_menu = True
+    while in_package_menu:
+        clear_screen()
+        show_banner()
+
+        if RICH_OK:
+            table = Table(box=HEAVY, show_header=True, header_style=_c("text_sub"), expand=True)
+            table.add_column("No", justify="right", style=_c("text_number"), width=4, no_wrap=True)
+            table.add_column("Nama Paket", style=_c("text_body"))
+            table.add_column("Harga", justify="right", style=_c("text_money"))
+            for pkg in packages:
+                table.add_row(str(pkg['number']), pkg['name'], f"Rp {pkg['price']:,}")
+
+            _print_centered_panel(table, title=f"[{_c('text_title')}]Paket Tersedia[/]", border_style=_c("border_info"))
+            _print_centered_panel(f"[{_c('text_sub')}]99. Kembali ke menu utama", border_style=_c("border_primary"))
+            pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)")
+        else:
+            print("--------------------------")
+            print("Paket Tersedia")
+            print("--------------------------")
+            for pkg in packages:
+                print(f"{pkg['number']}. {pkg['name']} - Rp {pkg['price']}")
+            print("99. Kembali ke menu utama")
+            print("--------------------------")
+            pkg_choice = input("Pilih paket (nomor): ")
+
+        if pkg_choice == "99":
+            in_package_menu = False
+            return None
+
+        if not pkg_choice.isdigit():
+            _print_centered_panel("Input harus angka.", border_style=_c("border_error"))
+            pause()
+            continue
+
+        selected_pkg = next((p for p in packages if p["number"] == int(pkg_choice)), None)
+        if not selected_pkg:
+            _print_centered_panel("Paket tidak ditemukan. Silakan masukan nomor yang benar.", border_style=_c("border_error"))
+            pause()
+            continue
+
+        is_done = show_package_details(api_key, tokens, selected_pkg["code"])
+        if is_done:
+            in_package_menu = False
+            return None
 
 def show_package_details(api_key, tokens, package_option_code):
     clear_screen()
