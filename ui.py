@@ -391,10 +391,18 @@ def show_account_menu():
             cmd.add_row("[bold]00[/]", "Kembali ke menu utama")
             cmd.add_row("[bold]99[/]", f"[{_c('text_err')}]Hapus Akun aktif[/]")
             cmd.add_row("", "Masukan nomor akun (No) untuk berganti")
-            _print_centered_panel(cmd, title=f"[{_c('text_title')}](users                 printTidak ters.")
-:
-Aers               , enumerate                    = andnumber_user"]
- active ()" if is_active else ""
+            _print_centered_panel(cmd, title=f"[{_c('text_title')}]Command[/]", border_style=_c("border_primary"))
+
+            input_str = Prompt.ask(f"[{_c('text_sub')}]Pilihan[/]")
+        else:
+            print("--------------------------")
+            if not users or len(users) == 0:
+                print("Tidak ada akun tersimpan.")
+            else:
+                print("Akun Tersimpan:")
+                for idx, user in enumerate(users):
+                    is_active = active_user and user["number"] == active_user["number"]
+                    active_marker = " (Aktif)" if is_active else ""
                     print(f"{idx + 1}. {user['number']}{active_marker}")
             print("0: Tambah Akun")
             print("00: Kembali ke menu utama")
