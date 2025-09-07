@@ -550,7 +550,7 @@ def show_package_menu(packages):
             table = Table(box=HEAVY, show_header=True, header_style=_c("text_sub"), expand=True)
             table.add_column("No", justify="right", style=_c("text_number"), width=4, no_wrap=True)
             table.add_column("Nama Paket", style=_c("text_body"))
-            table.add_column("Harga", justify="right", style=_c("text_money"))
+            table.add_column("Harga", justify="left", style=_c("text_money"))
             for pkg in packages:
                 table.add_row(str(pkg['number']), pkg['name'], f"Rp {pkg['price']:,}")
 
