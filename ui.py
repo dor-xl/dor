@@ -177,7 +177,6 @@ def _print_centered_panel(renderable, *, title=None, border_style=None, box=ROUN
         width=_term_width() #width or _target_width()
     )
     console.print(Align.center(panel))
-#
 def _print_full_width_panel(renderable, *, title=None, border_style=None, box=ROUNDED, padding=(1,1)):
     if not RICH_OK:
         print("--------------------------")
@@ -196,7 +195,6 @@ def _print_full_width_panel(renderable, *, title=None, border_style=None, box=RO
         width=_term_width()
     )
     console.print(panel)
-#
 # --- Gradient manual (kompatibel rich lama) ---
 def _hex_to_rgb(h):
     h = h.lstrip("#")
@@ -485,7 +483,7 @@ def login_prompt(api_key: str):
     clear_screen()
     show_banner()
     if RICH_OK:
-        _print_centered_panel(f"[{_c('text_sub')}]Masukan nomor XL Prabayar (Contoh 6281234567890)",
+        _print_centered_panel(f"[{_c('text_sub')}]Masukan nomor XL Prabayar Contoh 6281234567890",
                               title=f"[{_c('text_title')}]Login ke MyXL[/]", border_style=_c("border_info"))
         phone_number = Prompt.ask(f"[{_c('text_sub')}]Nomor[/]")
     else:
