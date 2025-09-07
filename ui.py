@@ -174,7 +174,7 @@ def _print_centered_panel(renderable, *, title=None, border_style=None, box=ROUN
         border_style=border_style,
         box=box,
         padding=padding,
-        width=width or _target_width()
+        width=_term_width() #width or _target_width()
     )
     console.print(Align.center(panel))
 
