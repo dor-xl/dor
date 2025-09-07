@@ -11,11 +11,10 @@ from ui import (
 try:
     from rich.table import Table
     from rich.prompt import Prompt
-    from rich.box import ROUNDED, HEAVY, DOUBLE
+    from rich.box import ROUNDED
 except ImportError:
     pass
 
-# Struktur: perusahaan -> kode family group
 family_codes_grouped = {
     "XL": {
         "1": {"name": "Xta Unlimited Turbo", "code": "08a3b1e6-8e78-4e45-a540-b40f06871cfe"},
@@ -52,7 +51,7 @@ def show_company_group_menu(api_key: str, tokens: dict):
                 table,
                 title=f"[{_c('text_title')}]Pilih Operator[/]",
                 border_style=_c("border_primary"),
-                box=DOUBLE
+                box=ROUNDED
             )
             choice = Prompt.ask(f"[{_c('text_sub')}]Pilih operator (nomor)").strip()
         else:
@@ -88,7 +87,7 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
         if RICH_OK:
             table = Table(
                 title=f"[{_c('text_title')}]Family Code Group - {perusahaan}[/]", show_header=True,
-                header_style=_c("text_sub"), box=HEAVY
+                header_style=_c("text_sub"), box=ROUNDED
             )
             table.add_column("No", style=_c("text_number"), width=4)
             table.add_column("Kategori", style=_c("text_body"))
@@ -99,7 +98,7 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
                 table,
                 title=f"[{_c('text_title')}]Pilih Family Code {perusahaan}[/]",
                 border_style=_c("border_primary"),
-                box=DOUBLE
+                box=ROUNDED
             )
             choice = Prompt.ask(f"[{_c('text_sub')}]Pilih kategori (nomor)").strip()
         else:
@@ -164,7 +163,7 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
             )
             table = Table(
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
-                header_style=_c("text_sub"), box=HEAVY
+                header_style=_c("text_sub"), box=ROUNDED
             )
             table.add_column("No", style=_c("text_number"), width=4)
             table.add_column("Nama Paket", style=_c("text_body"))
@@ -201,7 +200,7 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
                 table,
                 title=f"[{_c('text_title')}]Daftar Paket {perusahaan}[/]",
                 border_style=_c("border_info"),
-                box=DOUBLE
+                box=ROUNDED
             )
             pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)").strip()
         else:
@@ -236,3 +235,5 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
         if is_done:
             in_package_menu = False
             return
+
+# Untuk memulai menu, panggil: show_company_group_menu(api_key, tokens)
