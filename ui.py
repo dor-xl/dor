@@ -177,7 +177,26 @@ def _print_centered_panel(renderable, *, title=None, border_style=None, box=ROUN
         width=_term_width() #width or _target_width()
     )
     console.print(Align.center(panel))
-
+#
+def _print_full_width_panel(renderable, *, title=None, border_style=None, box=ROUNDED, padding=(1,1)):
+    if not RICH_OK:
+        print("--------------------------")
+        if isinstance(renderable, str):
+            print(renderable)
+        else:
+            print("[Panel disabled (rich not installed)]")
+        print("--------------------------")
+        return
+    panel = Panel(
+        renderable,
+        title=title,
+        border_style=border_style,
+        box=box,
+        padding=padding,
+        width=_term_width()
+    )
+    console.print(panel)
+#
 # --- Gradient manual (kompatibel rich lama) ---
 def _hex_to_rgb(h):
     h = h.lstrip("#")
