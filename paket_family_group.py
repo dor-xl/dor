@@ -60,7 +60,7 @@ def show_company_group_menu(api_key: str, tokens: dict):
             print("Daftar Operator/Perusahaan")
             for idx, perusahaan in enumerate(keys, 1):
                 print(f"{idx}. {perusahaan}")
-            print("99. Kembali ke menu utama")
+            print("00. Kembali ke menu utama")
             print("--------------------------")
             choice = input("Pilih operator (nomor): ").strip()
 
@@ -107,7 +107,7 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
             print(f"Pilih Kategori Family Code ({perusahaan})")
             for key, value in families.items():
                 print(f"{key}. {value['name']}")
-            print("99. Kembali ke menu operator")
+            print("00. Kembali ke menu operator")
             print("--------------------------")
             choice = input("Pilih kategori (nomor): ").strip()
 
