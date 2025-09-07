@@ -690,6 +690,7 @@ def show_package_details(api_key, tokens, package_option_code):
         print("1. Beli dengan Pulsa")
         print("2. Beli dengan E-Wallet")
         print("3. Bayar dengan QRIS")
+        print("00. Kembali")
         if payment_for == "REDEEM_VOUCHER":
             print("4. Ambil sebagai bonus (jika tersedia)")
         choice = input("Pilih metode pembayaran: ")
