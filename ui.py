@@ -483,14 +483,14 @@ def login_prompt(api_key: str):
     clear_screen()
     show_banner()
     if RICH_OK:
-        _print_centered_panel(f"[{_c('text_sub')}]Masukan nomor XL Prabayar Contoh 6281234567890",
+        _print_centered_panel(f"[{_c('text_sub')}]Masukan nomor XL Prabayar Contoh: 6281234567890",
                               title=f"[{_c('text_title')}]Login ke MyXL[/]", border_style=_c("border_info"))
         phone_number = Prompt.ask(f"[{_c('text_sub')}]Nomor[/]")
     else:
         print("--------------------------")
         print("Login ke MyXL")
         print("--------------------------")
-        print("Masukan nomor XL Prabayar (Contoh 6281234567890):")
+        print("Masukan nomor XL Prabayar Contoh: 6281234567890")
         phone_number = input("Nomor: ")
 
     if not phone_number.startswith("628") or len(phone_number) < 10 or len(phone_number) > 14:
