@@ -393,7 +393,7 @@ def show_package_details(api_key, tokens, package_option_code):
         # Benefits di atas S&K
         if benefits and isinstance(benefits, list):
             benefit_table = Table(box=ROUNDED, show_header=True, header_style=_c("text_sub"), expand=True)
-            benefit_table.add_column("Benefit", style=_c("text_body"))
+            benefit_table.add_column("Nama", style=_c("text_body"))
             benefit_table.add_column("Total", style=_c("text_body"))
             for benefit in benefits:
                 if "Call" in benefit['name']:
