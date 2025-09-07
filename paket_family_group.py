@@ -111,7 +111,7 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
             print("--------------------------")
             choice = input("Pilih kategori (nomor): ").strip()
 
-        if choice == "99":
+        if choice == "00":
             in_group_menu = False
             return
 
