@@ -578,6 +578,7 @@ def show_package_details(api_key, tokens, package_option_code):
     show_banner()
 
     package = get_package(api_key, tokens, package_option_code)
+benefits = package.get("benefits", [])
     if not package:
         _print_centered_panel("Failed to load package details.", border_style=_c("border_error"))
         pause()
