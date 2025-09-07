@@ -649,7 +649,7 @@ def show_package_details(api_key, tokens, package_option_code):
         menu.add_row("[bold]1[/]", "Beli dengan Pulsa")
         menu.add_row("[bold]2[/]", "Beli dengan E-Wallet")
         menu.add_row("[bold]3[/]", "Bayar dengan QRIS")
-        menu.add_row("[bold]00[/]", "Kembali")
+        menu.add_row("00", f"[{_c('text_err')}]Kembali ke menu sebelumnya [/]")
         if payment_for == "REDEEM_VOUCHER":
             menu.add_row("[bold]4[/]", "Ambil sebagai bonus (jika tersedia)")
         _print_centered_panel(menu, title=f"[{_c('text_title')}]Metode Pembayaran[/]", border_style=_c("border_info"))
