@@ -110,6 +110,7 @@ THEMES = {
     },
 }
 
+# THEME aktif (load dari file jika ada)
 def _load_theme_name():
     try:
         if os.path.exists(_THEME_FILE):
@@ -141,6 +142,7 @@ def set_theme(name: str):
 def _c(key: str) -> str:
     return THEME.get(key, "white")
 
+# ========= Phone-friendly width & centered helpers =========
 def _term_width(default=80):
     if not RICH_OK:
         return default
@@ -176,6 +178,7 @@ def _print_centered_panel(renderable, *, title=None, border_style=None, box=ROUN
     )
     console.print(Align.center(panel))
 
+# --- Gradient manual (kompatibel rich lama) ---
 def _hex_to_rgb(h):
     h = h.lstrip("#")
     return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
@@ -218,6 +221,7 @@ def _print_gradient_title(text="Dor XL by Flyxt9"):
         t = Text(str(text), style=_c("text_title"))
         console.print(Align.center(t))
 
+# ========= Old helpers =========
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -228,6 +232,7 @@ def pause():
     else:
         input("\nTekan Enter untuk lanjut...")
 
+# ========= Banner =========
 def show_banner():
     clear_screen()
     if RICH_OK:
@@ -253,8 +258,10 @@ def show_banner():
         print("")
         print("--------------------------")
 
+# ========= Main Menu =========
 def show_main_menu(number, balance, balance_expired_at):
     show_banner()
+
     phone_number = number
     remaining_balance = balance
     expired_at_dt = datetime.fromtimestamp(balance_expired_at).strftime("%Y-%m-%d %H:%M:%S")
@@ -298,8 +305,217 @@ def show_main_menu(number, balance, balance_expired_at):
         print("99. Tutup aplikasi")
         print("--------------------------")
 
-# ... menu tema, akun, login dll TIDAK BERUBAH
+# ========= Menu Ganti Tema =========
+def change_theme_menu():
+    if not RICH_OK:
+        print("Fitur tema butuh paket 'rich'. Jalankan: pip install rich")
+        pause()
+        return
 
+    show_banner()
+
+    table = Table(box=ROUNDED, show_header=True, header_style=_c("text_sub"), expand=True)
+    table.add_column("No", justify="right", style=_c("text_number"), width=8, no_wrap=True)
+    table.add_column("Nama Tema", style=_c("text_body"))
+    table.add_column("Preview", style=_c("text_body"))
+
+    keys = list(THEMES.keys())
+    previews = {
+        "dark_neon": "Neon gelap (violet/cyan)",
+        "default": "Magenta/Cyan klasik",
+        "red_black": "Merah-Hitam kontras",
+        "emerald_glass": "Emerald soft/glass",
+    }
+    for i, k in enumerate(keys, start=1):
+        table.add_row(str(i), k, previews.get(k, "-"))
+
+    _print_centered_panel(table, title=f"[{_c('text_title')}]Pilih Tema[/]", border_style=_c("border_info"))
+    choice = Prompt.ask(f"[{_c('text_sub')}]Masukkan nomor tema", default="1")
+
+    if not choice.isdigit() or not (1 <= int(choice) <= len(keys)):
+        _print_centered_panel("Pilihan tidak valid.", border_style=_c("border_error"))
+        pause()
+        return
+
+    name = keys[int(choice) - 1]
+    set_theme(name)
+    _print_centered_panel(f"Tema diganti ke: [bold]{name}[/]", border_style=_c("border_success"))
+    pause()
+
+# ========= Account Menu =========
+def show_account_menu():
+    clear_screen()
+    AuthInstance.load_tokens()
+    users = AuthInstance.refresh_tokens
+    active_user = AuthInstance.get_active_user()
+
+    in_account_menu = True
+    add_user = False
+    while in_account_menu:
+        clear_screen()
+        show_banner()
+
+        if AuthInstance.get_active_user() is None or add_user:
+            number, refresh_token = login_prompt(AuthInstance.api_key)
+            if not refresh_token:
+                _print_centered_panel("[bold]Gagal menambah akun. Silahkan coba lagi.[/]", border_style=_c("border_error"))
+                pause()
+                continue
+
+            AuthInstance.add_refresh_token(int(number), refresh_token)
+            AuthInstance.load_tokens()
+            users = AuthInstance.refresh_tokens
+
+            if add_user:
+                add_user = False
+            continue
+
+        if RICH_OK:
+            table = Table(box=ROUNDED, show_header=True, header_style=_c("text_sub"), expand=True)
+            table.add_column("No", justify="right", style=_c("text_number"), width=4)
+            table.add_column("Nomor", style=_c("text_body"))
+            table.add_column("Status", style=_c("text_body"))
+            if not users or len(users) == 0:
+                table.add_row("-", "Tidak ada akun tersimpan.", "-")
+            else:
+                for idx, user in enumerate(users):
+                    is_active = active_user and user["number"] == active_user["number"]
+                    status = f"[{_c('text_ok')}]Aktif[/]" if is_active else "[dim]-[/]"
+                    table.add_row(str(idx + 1), str(user["number"]), status)
+
+            _print_centered_panel(table, title=f"[{_c('text_title')}]Akun Tersimpan[/]", border_style=_c("border_info"))
+
+            cmd = Table.grid(padding=(0,2), expand=True)
+            cmd.add_column(justify="right", style=_c("text_number"), no_wrap=True, width=6)
+            cmd.add_column(style=_c("text_body"))
+            cmd.add_row("[bold]0[/]", "Tambah Akun")
+            cmd.add_row("[bold]00[/]", "Kembali ke menu utama")
+            cmd.add_row("[bold]99[/]", f"[{_c('text_err')}]Hapus Akun aktif[/]")
+            cmd.add_row("", "Masukan nomor akun (No) untuk berganti")
+            _print_centered_panel(cmd, title=f"[{_c('text_title')}]Command[/]", border_style=_c("border_primary"))
+
+            input_str = Prompt.ask(f"[{_c('text_sub')}]Pilihan[/]")
+        else:
+            print("--------------------------")
+            if not users or len(users) == 0:
+                print("Tidak ada akun tersimpan.")
+            else:
+                print("Akun Tersimpan:")
+                for idx, user in enumerate(users):
+                    is_active = active_user and user["number"] == active_user["number"]
+                    active_marker = " (Aktif)" if is_active else ""
+                    print(f"{idx + 1}. {user['number']}{active_marker}")
+            print("Command:")
+            print("0: Tambah Akun")
+            print("00: Kembali ke menu utama")
+            print("99: Hapus Akun aktif")
+            print("Masukan nomor akun untuk berganti.")
+            input_str = input("Pilihan:")
+
+        if input_str == "00":
+            in_account_menu = False
+            return active_user["number"] if active_user else None
+        elif input_str == "0":
+            add_user = True
+            continue
+        elif input_str == "99":
+            if not active_user:
+                _print_centered_panel("Tidak ada akun aktif untuk dihapus.", border_style=_c("border_warning"))
+                pause()
+                continue
+            confirm = (input(f"Yakin ingin menghapus akun {active_user['number']}? (y/n): ").lower() == 'y')
+            if confirm:
+                AuthInstance.remove_refresh_token(active_user["number"])
+                users = AuthInstance.refresh_tokens
+                active_user = AuthInstance.get_active_user()
+                _print_centered_panel("Akun berhasil dihapus.", border_style=_c("border_success"))
+                pause()
+            else:
+                _print_centered_panel("Penghapusan akun dibatalkan.", border_style=_c("border_info"))
+                pause()
+            continue
+        elif input_str.isdigit() and 1 <= int(input_str) <= len(users):
+            selected_user = users[int(input_str) - 1]
+            return selected_user['number']
+        else:
+            _print_centered_panel("Input tidak valid. Silahkan coba lagi.", border_style=_c("border_error"))
+            pause()
+            continue
+
+# ========= Login Menu (opsional) =========
+def show_login_menu():
+    clear_screen()
+    show_banner()
+    if RICH_OK:
+        menu = Table(box=ROUNDED, show_header=False, padding=(0,1), expand=True)
+        menu.add_column("key", justify="right", style=_c("text_number"), no_wrap=True, width=4)
+        menu.add_column("desc", style=_c("text_body"))
+        menu.add_row("[bold]1[/]", "Request OTP")
+        menu.add_row("[bold]2[/]", "Submit OTP")
+        menu.add_row("[bold]99[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
+        _print_centered_panel(menu, title=f"[{_c('text_title')}]Login ke MyXL[/]", border_style=_c("border_info"))
+    else:
+        print("--------------------------")
+        print("Login ke MyXL")
+        print("--------------------------")
+        print("1. Request OTP")
+        print("2. Submit OTP")
+        print("99. Tutup aplikasi")
+        print("--------------------------")
+
+# ========= Login Prompt =========
+def login_prompt(api_key: str):
+    clear_screen()
+    show_banner()
+    if RICH_OK:
+        _print_centered_panel(f"[{_c('text_sub')}]Masukan nomor XL Prabayar (Contoh 6281234567890)",
+                              title=f"[{_c('text_title')}]Login ke MyXL[/]", border_style=_c("border_info"))
+        phone_number = Prompt.ask(f"[{_c('text_sub')}]Nomor[/]")
+    else:
+        print("--------------------------")
+        print("Login ke MyXL")
+        print("--------------------------")
+        print("Masukan nomor XL Prabayar (Contoh 6281234567890):")
+        phone_number = input("Nomor: ")
+
+    if not phone_number.startswith("628") or len(phone_number) < 10 or len(phone_number) > 14:
+        _print_centered_panel("Nomor tidak valid. Pastikan nomor diawali '628' dan harus benar.", border_style=_c("border_error"))
+        return None, None
+
+    try:
+        if RICH_OK:
+            with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}")) as progress:
+                progress.add_task(description="Mengirim OTP...", total=None)
+                subscriber_id = get_otp(phone_number)
+        else:
+            subscriber_id = get_otp(phone_number)
+
+        if not subscriber_id:
+            _print_centered_panel("Gagal meminta OTP.", border_style=_c("border_error"))
+            return None, None
+
+        _print_centered_panel("OTP berhasil dikirim ke nomor Anda.", border_style=_c("border_success"))
+
+        otp = (Prompt.ask(f"[{_c('text_sub')}]Masukkan OTP (6 digit)") if RICH_OK else input("Masukkan OTP yang telah dikirim: "))
+        if not otp.isdigit() or len(otp) != 6:
+            _print_centered_panel("OTP tidak valid. Pastikan 6 digit angka.", border_style=_c("border_error"))
+            pause()
+            return None, None
+
+        tokens = submit_otp(api_key, phone_number, otp)
+        if not tokens:
+            _print_centered_panel("Gagal login. Periksa OTP dan coba lagi.", border_style=_c("border_error"))
+            pause()
+            return None, None
+
+        _print_centered_panel("Berhasil login!", border_style=_c("border_success"))
+        return phone_number, tokens["refresh_token"]
+
+    except Exception:
+        _print_centered_panel("Terjadi kesalahan saat login.", border_style=_c("border_error"))
+        return None, None
+
+# ========= Packages =========
 def show_package_menu(packages):
     api_key = AuthInstance.api_key
     tokens = AuthInstance.get_active_tokens()
@@ -356,7 +572,11 @@ def show_package_menu(packages):
 
 def show_package_details(api_key, tokens, package_option_code):
     clear_screen()
+    print("--------------------------")
+    print("Detail Paket")
+    print("--------------------------")
     show_banner()
+
     package = get_package(api_key, tokens, package_option_code)
     if not package:
         _print_centered_panel("Failed to load package details.", border_style=_c("border_error"))
@@ -367,14 +587,13 @@ def show_package_details(api_key, tokens, package_option_code):
     price = package["package_option"]["price"]
     detail = package["package_option"]["tnc"]
     detail = (detail.replace("<p>", "").replace("</p>", "")
-                  .replace("<strong>", "").replace("</strong>", "")
-                  .replace("<br>", "").replace("<br />", "").strip())
+                    .replace("<strong>", "").replace("</strong>", "")
+                    .replace("<br>", "").replace("<br />", "").strip())
     validity = package["package_option"]["validity"]
     name3 = package.get("package_option", {}).get("name","")
     name1 = package.get("package_family", {}).get("name","")
     title = f"{name1} {name2} {name3}".strip()
     item_name = f"{name2} {name3}".strip()
-    benefits = package["package_option"]["benefits"]
 
     token_confirmation = package["token_confirmation"]
     ts_to_sign = package["timestamp"]
