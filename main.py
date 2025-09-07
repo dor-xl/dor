@@ -49,8 +49,8 @@ def main():
                 show_company_group_menu(AuthInstance.api_key, active_user["tokens"])
                 continue
             elif choice == "6":
-                family_code = input("Enter family code (or '99' to cancel): ").strip()
-                if family_code == "99":
+                family_code = input("Enter family code (or '00' to cancel): ").strip()
+                if family_code == "00":
                     continue
                 get_packages_by_family(family_code)
                 continue
@@ -58,7 +58,7 @@ def main():
                 # <<< Tambahan: Ganti Tema >>>
                 change_theme_menu()
                 continue
-            elif choice == "99":
+            elif choice == "00":
                 print("Exiting the application.")
                 sys.exit(0)
             else:
