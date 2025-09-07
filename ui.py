@@ -607,29 +607,25 @@ def show_package_details(api_key, tokens, package_option_code):
         info.add_row("Harga", f"[{_c('text_money')}]Rp {price:,}[/]")
         info.add_row("Masa Aktif", f"[{_c('text_value')}]{validity}[/]")
  # banefit
-        benefits = package["package_option"]["benefits"]
-        if benefits and isinstance(benefits, list):
-            print("Benefits:")
-            for benefit in benefits:
-                print("--------------------------")
-                print(f" >>> {benefit['name']}")
-                if "Call" in benefit['name']:
-                    print(f"  Total: {benefit['total']/60} menit")
-                else:
-                    if benefit['total'] > 0:
-                        quota = int(benefit['total'])
-                        # It is in byte, make it in GB
-                        if quota >= 1_000_000_000:
-                            quota_gb = quota / (1024 ** 3)
-                            print(f"  Quota: {quota_gb:.2f} GB")
-                        elif quota >= 1_000_000:
-                            quota_mb = quota / (1024 ** 2)
-                            print(f"  Quota: {quota_mb:.2f} MB")
-                        elif quota >= 1_000:
-                            quota_kb = quota / 1024
-                            print(f"  Quota: {quota_kb:.2f} KB")
-                        else:
-                            print(f"  Total: {quota}")
+if benefits and isinstance(benefits, list):
+    benefit_table = Table(box=ROUNDED, show_header=True, header_style=_c("text_sub"), expand=True)
+    benefit_table.add_column("Benefit", style=_c("text_body"))
+    benefit_table.add_column("Total", style=_c("text_body"))
+    for benefit in benefits:
+        if "Call" in benefit['name']:
+            total = f"{benefit['total']/60:.0f} menit"
+        else:
+            quota = int(benefit['total'])
+            if quota >= 1_000_000_000:
+                total = f"{quota / (1024 ** 3):.2f} GB"
+            elif quota >= 1_000_000:
+                total = f"{quota / (1024 ** 2):.2f} MB"
+            elif quota >= 1_000:
+                total = f"{quota / 1024:.2f} KB"
+            else:
+                total = str(quota)
+        benefit_table.add_row(benefit['name'], total)
+    _print_centered_panel(benefit_table, title=f"[{_c('text_title')}]Benefits[/]", border_style=_c("border_info"))
 
         _print_centered_panel(info, title=f"[{_c('text_title')}]Detail Paket[/]", border_style=_c("border_info"))
 
