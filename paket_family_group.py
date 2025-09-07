@@ -43,7 +43,7 @@ def show_company_group_menu(api_key: str, tokens: dict):
                 title=f"[{_c('text_title')}]Daftar Operator/Perusahaan[/]",
                 show_header=True, header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
-            table.add_column("No", style=_c("text_number"), width=4)
+            table.add_column("No", justify="right", style=_c("text_number"))  # mepet kanan garis
             table.add_column("Perusahaan/Operator", style=_c("text_body"))
             for idx, perusahaan in enumerate(keys, 1):
                 table.add_row(str(idx), perusahaan)
@@ -90,7 +90,7 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
                 title=f"[{_c('text_title')}]Family Code Group - {perusahaan}[/]", show_header=True,
                 header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
-            table.add_column("No", style=_c("text_number"), width=4)
+            table.add_column("No", justify="right", style=_c("text_number"))  # mepet kanan garis
             table.add_column("Kategori", style=_c("text_body"))
             for key, value in families.items():
                 table.add_row(key, value['name'])
@@ -166,7 +166,7 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
                 header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
-            table.add_column("No", style=_c("text_number"), width=4)
+            table.add_column("No", justify="right", style=_c("text_number"))  # mepet kanan garis
             table.add_column("Nama Paket", style=_c("text_body"))
             table.add_column("Harga", style=_c("text_money"))
         else:
