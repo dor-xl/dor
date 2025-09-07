@@ -16,11 +16,11 @@ pkg install python
 ```
 4. Clone this repo
 ```
-git clone https://github.com/xl-cli/dorv1
+git clone https://github.com/dor-xl/dor
 ```
 5. Open the folder
 ```
-cd dorv1
+cd dor
 ```
 6. Install dependencies
 ```
