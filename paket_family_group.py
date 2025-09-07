@@ -47,7 +47,7 @@ def show_company_group_menu(api_key: str, tokens: dict):
             table.add_column("Perusahaan/Operator", style=_c("text_body"))
             for idx, perusahaan in enumerate(keys, 1):
                 table.add_row(str(idx), perusahaan)
-            table.add_row("99", f"[{_c('text_err')}]Kembali ke menu utama[/]")
+            table.add_row("00", f"[{_c('text_err')}]Kembali ke menu utama[/]")
             _print_centered_panel(
                 table,
                 title=f"[{_c('text_title')}]Pilih Operator[/]",
