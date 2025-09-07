@@ -64,7 +64,7 @@ def show_company_group_menu(api_key: str, tokens: dict):
             print("--------------------------")
             choice = input("Pilih operator (nomor): ").strip()
 
-        if choice == "99":
+        if choice == "00":
             in_company_menu = False
             return
 
@@ -94,7 +94,7 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
             table.add_column("Kategori", style=_c("text_body"))
             for key, value in families.items():
                 table.add_row(key, value['name'])
-            table.add_row("99", f"[{_c('text_err')}]Kembali ke menu operator[/]")
+            table.add_row("00", f"[{_c('text_err')}]Kembali ke menu operator[/]")
             _print_centered_panel(
                 table,
                 title=f"[{_c('text_title')}]Pilih Family Code {perusahaan}[/]",
