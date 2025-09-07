@@ -2,9 +2,10 @@ import json
 import os
 import sys
 from datetime import datetime
-from api_request import get_otp, submit_otp, save_tokens, get_package, purchase_package
+from api_request import get_otp, submit_otp, save_tokens, get_package, purchase_package, get_addons
 from purchase_api import show_multipayment, show_qris_payment, settlement_bounty
 from auth_helper import AuthInstance
+from util import display_html
 
 # ========== Rich Setup ==========
 try:
@@ -314,7 +315,7 @@ def change_theme_menu():
     show_banner()
 
     table = Table(box=ROUNDED, show_header=True, header_style=_c("text_sub"), expand=True)
-    table.add_column("No", justify="right", style=_c("text_number"), width=4, no_wrap=True)
+    table.add_column("No", justify="right", style=_c("text_number"), width=8, no_wrap=True)
     table.add_column("Nama Tema", style=_c("text_body"))
     table.add_column("Preview", style=_c("text_body"))
 
@@ -478,7 +479,7 @@ def login_prompt(api_key: str):
         phone_number = input("Nomor: ")
 
     if not phone_number.startswith("628") or len(phone_number) < 10 or len(phone_number) > 14:
-        _print_centered_panel("Nomor tidak valid. Pastikan nomor diawali '628' dan panjang benar.", border_style=_c("border_error"))
+        _print_centered_panel("Nomor tidak valid. Pastikan nomor diawali '628' dan harus benar.", border_style=_c("border_error"))
         return None, None
 
     try:
@@ -571,6 +572,9 @@ def show_package_menu(packages):
 
 def show_package_details(api_key, tokens, package_option_code):
     clear_screen()
+    print("--------------------------")
+    print("Detail Paket")
+    print("--------------------------")
     show_banner()
 
     package = get_package(api_key, tokens, package_option_code)
@@ -585,9 +589,11 @@ def show_package_details(api_key, tokens, package_option_code):
     detail = (detail.replace("<p>", "").replace("</p>", "")
                     .replace("<strong>", "").replace("</strong>", "")
                     .replace("<br>", "").replace("<br />", "").strip())
+    validity = package["package_option"]["validity"]
     name3 = package.get("package_option", {}).get("name","")
     name1 = package.get("package_family", {}).get("name","")
     title = f"{name1} {name2} {name3}".strip()
+    item_name = f"{name2} {name3}".strip()
 
     token_confirmation = package["token_confirmation"]
     ts_to_sign = package["timestamp"]
@@ -599,6 +605,32 @@ def show_package_details(api_key, tokens, package_option_code):
         info.add_column(style=_c("text_body"))
         info.add_row("Nama", f"[{_c('text_value')}]{title}[/]")
         info.add_row("Harga", f"[{_c('text_money')}]Rp {price:,}[/]")
+        info.add_row("Masa Aktif", f"[{_c('text_value')}]{validity}[/]")
+ # banefit
+        benefits = package["package_option"]["benefits"]
+        if benefits and isinstance(benefits, list):
+            print("Benefits:")
+            for benefit in benefits:
+                print("--------------------------")
+                print(f" >>> {benefit['name']}")
+                if "Call" in benefit['name']:
+                    print(f"  Total: {benefit['total']/60} menit")
+                else:
+                    if benefit['total'] > 0:
+                        quota = int(benefit['total'])
+                        # It is in byte, make it in GB
+                        if quota >= 1_000_000_000:
+                            quota_gb = quota / (1024 ** 3)
+                            print(f"  Quota: {quota_gb:.2f} GB")
+                        elif quota >= 1_000_000:
+                            quota_mb = quota / (1024 ** 2)
+                            print(f"  Quota: {quota_mb:.2f} MB")
+                        elif quota >= 1_000:
+                            quota_kb = quota / 1024
+                            print(f"  Quota: {quota_kb:.2f} KB")
+                        else:
+                            print(f"  Total: {quota}")
+
         _print_centered_panel(info, title=f"[{_c('text_title')}]Detail Paket[/]", border_style=_c("border_info"))
 
         _print_centered_panel(Text(detail, style=_c("text_body")), title=f"[{_c('text_title')}]S&K MyXL[/]", border_style=_c("border_primary"))
@@ -620,6 +652,34 @@ def show_package_details(api_key, tokens, package_option_code):
         print("--------------------------")
         print(f"Nama: {title}")
         print(f"Harga: Rp {price}")
+        print(f"Masa Aktif: {validity}")
+        print("--------------------------")
+        benefits = package["package_option"]["benefits"]
+        if benefits and isinstance(benefits, list):
+            print("Benefits:")
+            for benefit in benefits:
+                print("--------------------------")
+                print(f" >>>: {benefit['name']}")
+                if "Call" in benefit['name']:
+                    print(f"  Total: {benefit['total']/60} menit")
+                else:
+                    if benefit['total'] > 0:
+                        quota = int(benefit['total'])
+                        # It is in byte, make it in GB
+                        if quota >= 1_000_000_000:
+                            quota_gb = quota / (1024 ** 3)
+                            print(f"  Quota: {quota_gb:.2f} GB")
+                        elif quota >= 1_000_000:
+                            quota_mb = quota / (1024 ** 2)
+                            print(f"  Quota: {quota_mb:.2f} MB")
+                        elif quota >= 1_000:
+                            quota_kb = quota / 1024
+                            print(f"  Quota: {quota_kb:.2f} KB")
+                        else:
+                            print(f"  Total: {quota}")
+        print("--------------------------")
+        addons = get_addons(api_key, tokens, package_option_code)
+        print(f"Addons:\n{json.dumps(addons, indent=2)}")
         print(f"SnK MyXL:\n{detail}")
         print("--------------------------")
         print("1. Beli dengan Pulsa")
@@ -660,3 +720,5 @@ def show_package_details(api_key, tokens, package_option_code):
     else:
         _print_centered_panel("Purchase dibatalkan.", border_style=_c("border_warning"))
         return False
+    pause()
+    sys.exit(0)
