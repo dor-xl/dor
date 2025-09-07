@@ -6,7 +6,8 @@ from ui import (
     console,
     _c,
     RICH_OK,
-    _print_full_width_panel
+    _print_full_width_panel,
+    _print_centered_panel
 )
 try:
     from rich.table import Table
@@ -40,14 +41,14 @@ def show_company_group_menu(api_key: str, tokens: dict):
         if RICH_OK:
             table = Table(
                 title=f"[{_c('text_title')}]Daftar Operator/Perusahaan[/]",
-                show_header=True, header_style=_c("text_sub"), box=ROUNDED
+                show_header=True, header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
             table.add_column("No", style=_c("text_number"), width=4)
             table.add_column("Perusahaan/Operator", style=_c("text_body"))
             for idx, perusahaan in enumerate(keys, 1):
                 table.add_row(str(idx), perusahaan)
             table.add_row("99", f"[{_c('text_err')}]Kembali ke menu utama[/]")
-            _print_full_width_panel(
+            _print_centered_panel(
                 table,
                 title=f"[{_c('text_title')}]Pilih Operator[/]",
                 border_style=_c("border_primary"),
@@ -87,14 +88,14 @@ def show_family_group_menu(api_key: str, tokens: dict, perusahaan: str):
         if RICH_OK:
             table = Table(
                 title=f"[{_c('text_title')}]Family Code Group - {perusahaan}[/]", show_header=True,
-                header_style=_c("text_sub"), box=ROUNDED
+                header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
             table.add_column("No", style=_c("text_number"), width=4)
             table.add_column("Kategori", style=_c("text_body"))
             for key, value in families.items():
                 table.add_row(key, value['name'])
             table.add_row("99", f"[{_c('text_err')}]Kembali ke menu operator[/]")
-            _print_full_width_panel(
+            _print_centered_panel(
                 table,
                 title=f"[{_c('text_title')}]Pilih Family Code {perusahaan}[/]",
                 border_style=_c("border_primary"),
@@ -163,7 +164,7 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
             )
             table = Table(
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
-                header_style=_c("text_sub"), box=ROUNDED
+                header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
             table.add_column("No", style=_c("text_number"), width=4)
             table.add_column("Nama Paket", style=_c("text_body"))
