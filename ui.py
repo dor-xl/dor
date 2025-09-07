@@ -301,7 +301,7 @@ def show_main_menu(number, balance, balance_expired_at):
         menu.add_row("[bold]5[/]", "Dor Paket Lainnya..")
         menu.add_row("[bold]6[/]", "Input Family Code Sendiri")
         menu.add_row("[bold]7[/]", f"[{_c('text_sub')}]Ganti Tema[/]")
-        menu.add_row("[bold]x[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
+        menu.add_row("[bold]99[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
         _print_centered_panel(menu, title=f"[{_c('text_title')}]Menu[/]", border_style=_c("border_primary"))
     else:
         print("--------------------------")
@@ -318,7 +318,7 @@ def show_main_menu(number, balance, balance_expired_at):
         print("5. Dor Paket Lainnya..")
         print("6. Input Family Code Sendiri")
         print("7. Ganti Tema")
-        print("x. Tutup aplikasi")
+        print("99. Tutup aplikasi")
         print("--------------------------")
 
 # ========= Menu Ganti Tema =========
@@ -467,7 +467,7 @@ def show_login_menu():
         menu.add_column("desc", style=_c("text_body"))
         menu.add_row("[bold]1[/]", "Request OTP")
         menu.add_row("[bold]2[/]", "Submit OTP")
-        menu.add_row("[bold]x[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
+        menu.add_row("[bold]99[/]", f"[{_c('text_err')}]Tutup aplikasi[/]")
         _print_centered_panel(menu, title=f"[{_c('text_title')}]Login ke MyXL[/]", border_style=_c("border_info"))
     else:
         print("--------------------------")
@@ -553,7 +553,7 @@ def show_package_menu(packages):
                 table.add_row(str(pkg['number']), pkg['name'], f"Rp {pkg['price']:,}")
 
             _print_centered_panel(table, title=f"[{_c('text_title')}]Paket Tersedia[/]", border_style=_c("border_info"))
-            _print_centered_panel(f"[{_c('text_sub')}]99. Kembali ke menu utama", border_style=_c("border_primary"))
+            _print_centered_panel(f"[{_c('text_sub')}]00. Kembali ke menu utama", border_style=_c("border_primary"))
             pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)")
         else:
             print("--------------------------")
@@ -615,9 +615,9 @@ def show_package_details(api_key, tokens, package_option_code):
         info = Table.grid(padding=(0,2))
         info.add_column(justify="right", style=_c("text_sub"))
         info.add_column(style=_c("text_body"))
-        info.add_row("Nama", f"[{_c('text_value')}]{title}[/]")
-        info.add_row("Harga", f"[{_c('text_money')}]Rp {price:,}[/]")
-        info.add_row("Masa Aktif", f"[{_c('text_value')}]{validity}[/]")
+        info.add_row("Nama:", f"[{_c('text_value')}]{title}[/]")
+        info.add_row("Harga:", f"[{_c('text_money')}]Rp {price:,}[/]")
+        info.add_row("Masa Aktif:", f"[{_c('text_value')}]{validity}[/]")
 
         _print_centered_panel(info, title=f"[{_c('text_title')}]Detail Paket[/]", border_style=_c("border_info"))
        # Benefits Table
