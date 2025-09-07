@@ -6,13 +6,12 @@ from ui import (
     console,
     _c,
     RICH_OK,
-    _print_full_width_panel  # Pastikan helper panel sudah ada di ui.py
+    _print_full_width_panel
 )
 
 try:
     from rich.table import Table
     from rich.prompt import Prompt
-    from rich.align import Align
 except ImportError:
     pass
 
