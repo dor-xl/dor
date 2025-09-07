@@ -43,7 +43,7 @@ def show_company_group_menu(api_key: str, tokens: dict):
                 title=f"[{_c('text_title')}]Daftar Operator/Perusahaan[/]",
                 show_header=True, header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
-            table.add_column("No", justify="right", style=_c("text_number"))  # mepet kanan garis
+            table.add_column("No", justify="right", style=_c("text_number"))
             table.add_column("Perusahaan/Operator", style=_c("text_body"))
             for idx, perusahaan in enumerate(keys, 1):
                 table.add_row(str(idx), perusahaan)
