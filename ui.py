@@ -261,7 +261,6 @@ def show_banner():
 # ========= Main Menu =========
 def show_main_menu(number, balance, balance_expired_at):
     show_banner()
-
     phone_number = number
     remaining_balance = balance
     expired_at_dt = datetime.fromtimestamp(balance_expired_at).strftime("%Y-%m-%d %H:%M:%S")
@@ -392,18 +391,10 @@ def show_account_menu():
             cmd.add_row("[bold]00[/]", "Kembali ke menu utama")
             cmd.add_row("[bold]99[/]", f"[{_c('text_err')}]Hapus Akun aktif[/]")
             cmd.add_row("", "Masukan nomor akun (No) untuk berganti")
-            _print_centered_panel(cmd, title=f"[{_c('text_title')}]Command[/]", border_style=_c("border_primary"))
-
-            input_str = Prompt.ask(f"[{_c('text_sub')}]Pilihan[/]")
-        else:
-            print("--------------------------")
-            if not users or len(users) == 0:
-                print("Tidak ada akun tersimpan.")
-            else:
-                print("Akun Tersimpan:")
-                for idx, user in enumerate(users):
-                    is_active = active_user and user["number"] == active_user["number"]
-                    active_marker = " (Aktif)" if is_active else ""
+            _print_centered_panel(cmd, title=f"[{_c('text_title')}](users                 printTidak ters.")
+:
+Aers               , enumerate                    = andnumber_user"]
+ active ()" if is_active else ""
                     print(f"{idx + 1}. {user['number']}{active_marker}")
             print("Command:")
             print("0: Tambah Akun")
@@ -572,11 +563,7 @@ def show_package_menu(packages):
 
 def show_package_details(api_key, tokens, package_option_code):
     clear_screen()
-    print("--------------------------")
-    print("Detail Paket")
-    print("--------------------------")
     show_banner()
-
     package = get_package(api_key, tokens, package_option_code)
     if not package:
         _print_centered_panel("Failed to load package details.", border_style=_c("border_error"))
@@ -587,13 +574,14 @@ def show_package_details(api_key, tokens, package_option_code):
     price = package["package_option"]["price"]
     detail = package["package_option"]["tnc"]
     detail = (detail.replace("<p>", "").replace("</p>", "")
-                    .replace("<strong>", "").replace("</strong>", "")
-                    .replace("<br>", "").replace("<br />", "").strip())
+                  .replace("<strong>", "").replace("</strong>", "")
+                  .replace("<br>", "").replace("<br />", "").strip())
     validity = package["package_option"]["validity"]
     name3 = package.get("package_option", {}).get("name","")
     name1 = package.get("package_family", {}).get("name","")
     title = f"{name1} {name2} {name3}".strip()
     item_name = f"{name2} {name3}".strip()
+    benefits = package["package_option"]["benefits"]
 
     token_confirmation = package["token_confirmation"]
     ts_to_sign = package["timestamp"]
@@ -606,29 +594,29 @@ def show_package_details(api_key, tokens, package_option_code):
         info.add_row("Nama", f"[{_c('text_value')}]{title}[/]")
         info.add_row("Harga", f"[{_c('text_money')}]Rp {price:,}[/]")
         info.add_row("Masa Aktif", f"[{_c('text_value')}]{validity}[/]")
- # banefit
-if benefits and isinstance(benefits, list):
-    benefit_table = Table(box=ROUNDED, show_header=True, header_style=_c("text_sub"), expand=True)
-    benefit_table.add_column("Benefit", style=_c("text_body"))
-    benefit_table.add_column("Total", style=_c("text_body"))
-    for benefit in benefits:
-        if "Call" in benefit['name']:
-            total = f"{benefit['total']/60:.0f} menit"
-        else:
-            quota = int(benefit['total'])
-            if quota >= 1_000_000_000:
-                total = f"{quota / (1024 ** 3):.2f} GB"
-            elif quota >= 1_000_000:
-                total = f"{quota / (1024 ** 2):.2f} MB"
-            elif quota >= 1_000:
-                total = f"{quota / 1024:.2f} KB"
-            else:
-                total = str(quota)
-        benefit_table.add_row(benefit['name'], total)
-    _print_centered_panel(benefit_table, title=f"[{_c('text_title')}]Benefits[/]", border_style=_c("border_info"))
+
+        # Benefits Table
+        if benefits and isinstance(benefits, list):
+            benefit_table = Table(box=ROUNDED, show_header=True, header_style=_c("text_sub"), expand=True)
+            benefit_table.add_column("Benefit", style=_c("text_body"))
+            benefit_table.add_column("Total", style=_c("text_body"))
+            for benefit in benefits:
+                if "Call" in benefit['name']:
+                    total = f"{benefit['total']/60:.0f} menit"
+                else:
+                    quota = int(benefit['total'])
+                    if quota >= 1_000_000_000:
+                        total = f"{quota / (1024 ** 3):.2f} GB"
+                    elif quota >= 1_000_000:
+                        total = f"{quota / (1024 ** 2):.2f} MB"
+                    elif quota >= 1_000:
+                        total = f"{quota / 1024:.2f} KB"
+                    else:
+                        total = str(quota)
+                benefit_table.add_row(benefit['name'], total)
+            _print_centered_panel(benefit_table, title=f"[{_c('text_title')}]Benefits[/]", border_style=_c("border_info"))
 
         _print_centered_panel(info, title=f"[{_c('text_title')}]Detail Paket[/]", border_style=_c("border_info"))
-
         _print_centered_panel(Text(detail, style=_c("text_body")), title=f"[{_c('text_title')}]S&K MyXL[/]", border_style=_c("border_primary"))
 
         menu = Table(box=ROUNDED, show_header=False, padding=(0,1), expand=True)
@@ -640,7 +628,6 @@ if benefits and isinstance(benefits, list):
         if payment_for == "REDEEM_VOUCHER":
             menu.add_row("[bold]4[/]", "Ambil sebagai bonus (jika tersedia)")
         _print_centered_panel(menu, title=f"[{_c('text_title')}]Metode Pembayaran[/]", border_style=_c("border_info"))
-
         choice = Prompt.ask(f"[{_c('text_sub')}]Pilih metode pembayaran")
     else:
         print("--------------------------")
@@ -650,18 +637,16 @@ if benefits and isinstance(benefits, list):
         print(f"Harga: Rp {price}")
         print(f"Masa Aktif: {validity}")
         print("--------------------------")
-        benefits = package["package_option"]["benefits"]
         if benefits and isinstance(benefits, list):
             print("Benefits:")
             for benefit in benefits:
                 print("--------------------------")
-                print(f" >>>: {benefit['name']}")
+                print(f" >>> {benefit['name']}")
                 if "Call" in benefit['name']:
                     print(f"  Total: {benefit['total']/60} menit")
                 else:
                     if benefit['total'] > 0:
                         quota = int(benefit['total'])
-                        # It is in byte, make it in GB
                         if quota >= 1_000_000_000:
                             quota_gb = quota / (1024 ** 3)
                             print(f"  Quota: {quota_gb:.2f} GB")
