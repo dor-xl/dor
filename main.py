@@ -55,7 +55,7 @@ def main():
                 get_packages_by_family(family_code)
                 continue
             elif choice == "7":
-                # <<< Tambahan: Ganti Tema >>>
+                # Ganti Tema
                 change_theme_menu()
                 continue
             elif choice == "00":
