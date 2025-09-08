@@ -32,7 +32,7 @@ def fetch_my_packages():
     }
 
     clear_screen()
-    # Judul "My Packages" dalam box/panel
+
     if RICH_OK and Panel and ROUNDED and console:
         console.print(
             Panel(
