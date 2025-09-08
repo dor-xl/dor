@@ -174,7 +174,7 @@ def _print_centered_panel(renderable, *, title=None, border_style=None, box=ROUN
         border_style=border_style,
         box=box,
         padding=padding,
-        width=_term_width() #width or _target_width()
+        width=_term_width()
     )
     console.print(Align.center(panel))
 def _print_full_width_panel(renderable, *, title=None, border_style=None, box=ROUNDED, padding=(1,1)):
@@ -306,8 +306,8 @@ def show_main_menu(number, balance, balance_expired_at):
     else:
         print("--------------------------")
         print("Informasi Akun")
-        print(f"Nomor: {phone_number}")
-        print(f"Pulsa: Rp {remaining_balance}")
+        print(f"Nomor Anda: {phone_number}")
+        print(f"Sisa Pulsa: Rp {remaining_balance}")
         print(f"Masa aktif: {expired_at_dt}")
         print("--------------------------")
         print("Menu:")
@@ -615,9 +615,9 @@ def show_package_details(api_key, tokens, package_option_code):
         info = Table.grid(padding=(0,2))
         info.add_column(justify="right", style=_c("text_sub"))
         info.add_column(style=_c("text_body"))
-        info.add_row("Nama:", f"[{_c('text_value')}]{title}[/]")
-        info.add_row("Harga:", f"[{_c('text_money')}]Rp {price:,}[/]")
-        info.add_row("Masa Aktif:", f"[{_c('text_value')}]{validity}[/]")
+        info.add_row("Nama Paket", f"[{_c('text_value')}]{title}[/]")
+        info.add_row("Harga Paket", f"[{_c('text_money')}]Rp {price:,}[/]")
+        info.add_row("Masa Aktif", f"[{_c('text_value')}]{validity}[/]")
 
         _print_centered_panel(info, title=f"[{_c('text_title')}]Detail Paket[/]", border_style=_c("border_info"))
        # Benefits Table
