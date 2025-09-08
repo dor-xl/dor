@@ -105,7 +105,7 @@ def get_packages_by_family(family_code: str):
                 border_style=_c("border_info"),
                 box=ROUNDED
             )
-            console.print(panel)
+            #console.print(panel)
             pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)").strip()
         else:
             print("00. Kembali ke menu sebelumnya")
