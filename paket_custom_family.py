@@ -2,6 +2,7 @@ import json
 from api_request import send_api_request, get_family
 from auth_helper import AuthInstance
 from ui import clear_screen, pause, show_package_details, console, _c, RICH_OK
+
 try:
     from rich.table import Table
     from rich.panel import Panel
@@ -23,7 +24,6 @@ def get_packages_by_family(family_code: str):
         return None
 
     packages = []
-
     data = get_family(api_key, tokens, family_code)
     if not data:
         if RICH_OK:
@@ -32,7 +32,7 @@ def get_packages_by_family(family_code: str):
             print("Failed to load family data.")
         pause()
         return None
-    
+
     in_package_menu = True
     while in_package_menu:
         clear_screen()
@@ -40,11 +40,16 @@ def get_packages_by_family(family_code: str):
         package_variants = data.get("package_variants", [])
 
         if RICH_OK:
+            terminal_width = console.size.width
             panel_title = f"[{_c('text_title')}]Family Name:[/] [{_c('text_ok')}]{family_name}[/{_c('text_ok')}]"
-            console.print(Align.center(Panel(panel_title, style=_c("border_info"), box=ROUNDED)))
+            console.print(Panel(panel_title, style=_c("border_info"), box=ROUNDED, width=terminal_width))
+
             table = Table(
-                title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
-                header_style=_c("text_sub"), box=ROUNDED
+                title=f"[{_c('text_title')}]Paket Tersedia[/]",
+                show_header=True,
+                header_style=_c("text_sub"),
+                box=ROUNDED,
+                expand=True
             )
             table.add_column("No", justify="right", style=_c("text_number"))
             table.add_column("Nama Paket", style=_c("text_body"))
@@ -54,7 +59,7 @@ def get_packages_by_family(family_code: str):
             print(f"Family Name: {family_name}")
             print("Paket Tersedia")
             print("--------------------------")
-        
+
         packages.clear()
         option_number = 1
         variant_number = 1
@@ -75,29 +80,31 @@ def get_packages_by_family(family_code: str):
                     "code": option_code
                 })
                 if RICH_OK:
-                    formatted_price = f"Rp {int(option_price):,}" if isinstance(option_price, int) else f"Rp {option_price}"
-                    table.add_row(
-                        str(option_number), option_name, formatted_price
-                    )
+                    try:
+                        formatted_price = f"Rp {int(float(option_price)):,}"
+                    except (ValueError, TypeError):
+                        formatted_price = f"Rp {option_price}"
+                    table.add_row(str(option_number), option_name, formatted_price)
                 else:
                     print(f"{option_number}. {option_name} - Rp {option_price}")
                 option_number += 1
             variant_number += 1
 
-        if RICH_OK:
+if RICH_OK:
             table.add_row("00", f"[{_c('text_err')}]Kembali ke menu sebelumnya[/]", "")
             panel = Panel(
                 Align.center(table),
                 title=f"[{_c('text_title')}]Daftar Paket Family[/]",
                 border_style=_c("border_info"),
-                box=ROUNDED
+                box=ROUNDED,
+                width=terminal_width
             )
             console.print(panel)
             pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)").strip()
         else:
             print("00. Kembali ke menu sebelumnya")
             pkg_choice = input("Pilih paket (nomor): ").strip()
-        
+
         if pkg_choice == "00":
             in_package_menu = False
             return None
@@ -117,7 +124,7 @@ def get_packages_by_family(family_code: str):
                 print("Paket tidak ditemukan. Silakan masukan nomor yang benar.")
             pause()
             continue
-        
+
         is_done = show_package_details(api_key, tokens, selected_pkg["code"])
         if is_done:
             in_package_menu = False
