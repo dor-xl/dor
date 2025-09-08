@@ -14,9 +14,7 @@ from ui import (
 )
 try:
     from rich.table import Table
-    #from rich.panel import Panel
     from rich.prompt import Prompt
-    #from rich.align import Align
     from rich.box import ROUNDED
 except ImportError:
     pass
@@ -105,7 +103,6 @@ def get_packages_by_family(family_code: str):
                 border_style=_c("border_info"),
                 box=ROUNDED
             )
-            #console.print(panel)
             pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)").strip()
         else:
             print("00. Kembali ke menu sebelumnya")
