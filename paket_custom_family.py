@@ -55,7 +55,7 @@ def get_packages_by_family(family_code: str):
                 border_style=_c("border_info"),
                 box=ROUNDED
             )
-            console.print(Align.center(Panel(panel_title, style=_c("border_info"), box=ROUNDED)))
+            #
             table = Table(
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
                 header_style=_c("text_sub"), box=ROUNDED
