@@ -1,7 +1,16 @@
 import json
 from api_request import send_api_request, get_family
 from auth_helper import AuthInstance
-from ui import clear_screen, pause, show_package_details, console, _c, RICH_OK
+from ui import (
+    clear_screen,
+    show_package_details,
+    pause,
+    console,
+    _c,
+    RICH_OK,
+    _print_full_width_panel,
+    _print_centered_panel
+)
 try:
     from rich.table import Table
     from rich.panel import Panel
