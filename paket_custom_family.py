@@ -17,7 +17,7 @@ try:
     from rich.panel import Panel
     from rich.prompt import Prompt
     from rich.align import Align
-    from rich.box import ROUNDED
+    #from rich.box import ROUNDED
 except ImportError:
     pass
 
@@ -54,7 +54,7 @@ def get_packages_by_family(family_code: str):
             _print_full_width_panel(
                 panel_title,
                 border_style=_c("border_info"),
-                box=ROUNDED
+                box=None #ROUNDED
             )
             table = Table(
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
@@ -103,7 +103,7 @@ def get_packages_by_family(family_code: str):
                 Align.center(table),
                 title=f"[{_c('text_title')}]Daftar Paket Family[/]",
                 border_style=_c("border_info"),
-                box=ROUNDED
+                box=None #ROUNDED
             )
             console.print(panel)
             pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)").strip()
