@@ -193,7 +193,7 @@ def show_packages_by_family(api_key: str, tokens: dict, family_code: str, perusa
                 try:
                     formatted_price = f"Rp {int(option_price):,}"
                 except (ValueError, TypeError):
-                    formatted_price = f"Rp {option_price}"  # fallback jika bukan angka
+                    formatted_price = f"Rp {option_price}"
 
                 if RICH_OK:
                     table.add_row(str(option_number), option_name, formatted_price)
