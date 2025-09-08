@@ -649,7 +649,7 @@ def show_package_details(api_key, tokens, package_option_code):
         menu.add_row("[bold]1[/]", "Beli dengan Pulsa")
         menu.add_row("[bold]2[/]", "Beli dengan E-Wallet")
         menu.add_row("[bold]3[/]", "Bayar dengan QRIS")
-        menu.add_row("", f"[{_c('text_err')}]Enter untuk membatalkan[/]")
+        menu.add_row("", f"[{_c('text_err')}]Untuk membatalkan tekan enter[/]")
         if payment_for == "REDEEM_VOUCHER":
             menu.add_row("[bold]4[/]", "Ambil sebagai bonus (jika tersedia)")
         _print_centered_panel(menu, title=f"[{_c('text_title')}]Metode Pembayaran[/]", border_style=_c("border_info"))
@@ -691,7 +691,7 @@ def show_package_details(api_key, tokens, package_option_code):
         print("1. Beli dengan Pulsa")
         print("2. Beli dengan E-Wallet")
         print("3. Bayar dengan QRIS")
-        print("Enter untuk membatalkan")
+        print("Untuk membatalkan tekan enter")
         if payment_for == "REDEEM_VOUCHER":
             print("4. Ambil sebagai bonus (jika tersedia)")
         choice = input("Pilih metode pembayaran: ")
