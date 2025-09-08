@@ -48,7 +48,7 @@ def get_packages_by_family(family_code: str):
             )
             table.add_column("No", justify="right", style=_c("text_number"))
             table.add_column("Nama Paket", style=_c("text_body"))
-            table.add_column("Harga", style=_c("text_money"))
+            table.add_column("Harga", style=_c("text_money"), justify="right")
         else:
             print("--------------------------")
             print(f"Family Name: {family_name}")
@@ -75,8 +75,9 @@ def get_packages_by_family(family_code: str):
                     "code": option_code
                 })
                 if RICH_OK:
+                    formatted_price = f"Rp {int(option_price):,}" if isinstance(option_price, int) else f"Rp {option_price}"
                     table.add_row(
-                        str(option_number), option_name, f"Rp {option_price}"
+                        str(option_number), option_name, formatted_price
                     )
                 else:
                     print(f"{option_number}. {option_name} - Rp {option_price}")
