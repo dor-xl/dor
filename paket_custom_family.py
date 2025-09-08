@@ -54,7 +54,7 @@ def get_packages_by_family(family_code: str):
             _print_full_width_panel(
                 panel_title,
                 border_style=_c("border_info"),
-                box=None #ROUNDED
+                box=ROUNDED
             )
             table = Table(
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
@@ -103,7 +103,7 @@ def get_packages_by_family(family_code: str):
                 Align.center(table),
                 title=f"[{_c('text_title')}]Daftar Paket Family[/]",
                 border_style=_c("border_info"),
-                box=None #ROUNDED
+                box=ROUNDED
             )
             console.print(panel)
             pkg_choice = Prompt.ask(f"[{_c('text_sub')}]Pilih paket (nomor)").strip()
