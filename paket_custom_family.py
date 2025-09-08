@@ -1,3 +1,4 @@
+python
 import json
 from api_request import send_api_request, get_family
 from auth_helper import AuthInstance
@@ -21,9 +22,9 @@ def get_packages_by_family(family_code: str):
             print("No active user tokens found.")
         pause()
         return None
-        
+
     packages = []
-    
+
     data = get_family(api_key, tokens, family_code)
     if not data:
         if RICH_OK:
@@ -97,6 +98,7 @@ def get_packages_by_family(family_code: str):
         else:
             print("00. Kembali ke menu sebelumnya")
             pkg_choice = input("Pilih paket (nomor): ").strip()
+        
         if pkg_choice == "00":
             in_package_menu = False
             return None
