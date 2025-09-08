@@ -1,7 +1,17 @@
 import json
 from api_request import send_api_request, get_family
 from auth_helper import AuthInstance
-from ui import clear_screen, pause, show_package_details, console, _c, RICH_OK
+from api_request import get_family
+from ui import (
+    clear_screen,
+    show_package_details,
+    pause,
+    console,
+    _c,
+    RICH_OK,
+    _print_full_width_panel,
+    _print_centered_panel
+)
 try:
     from rich.table import Table
     from rich.panel import Panel
@@ -21,9 +31,9 @@ def get_packages_by_family(family_code: str):
             print("No active user tokens found.")
         pause()
         return None
-
+        
     packages = []
-
+    
     data = get_family(api_key, tokens, family_code)
     if not data:
         if RICH_OK:
@@ -41,14 +51,18 @@ def get_packages_by_family(family_code: str):
 
         if RICH_OK:
             panel_title = f"[{_c('text_title')}]Family Name:[/] [{_c('text_ok')}]{family_name}[/{_c('text_ok')}]"
-            console.print(Align.center(Panel(panel_title, style=_c("border_info"), box=ROUNDED)))
+            _print_full_width_panel(
+                panel_title,
+                border_style=_c("border_info"),
+                box=ROUNDED
+            )
             table = Table(
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
-                header_style=_c("text_sub"), box=ROUNDED
+                header_style=_c("text_sub"), box=ROUNDED, expand=True
             )
             table.add_column("No", justify="right", style=_c("text_number"))
             table.add_column("Nama Paket", style=_c("text_body"))
-            table.add_column("Harga", style=_c("text_money"), justify="right")
+            table.add_column("Harga", style=_c("text_money"))
         else:
             print("--------------------------")
             print(f"Family Name: {family_name}")
@@ -75,9 +89,8 @@ def get_packages_by_family(family_code: str):
                     "code": option_code
                 })
                 if RICH_OK:
-                    formatted_price = f"Rp {int(option_price):,}" if isinstance(option_price, int) else f"Rp {option_price}"
                     table.add_row(
-                        str(option_number), option_name, formatted_price
+                        str(option_number), option_name, f"Rp {option_price}"
                     )
                 else:
                     print(f"{option_number}. {option_name} - Rp {option_price}")
@@ -97,7 +110,6 @@ def get_packages_by_family(family_code: str):
         else:
             print("00. Kembali ke menu sebelumnya")
             pkg_choice = input("Pilih paket (nomor): ").strip()
-        
         if pkg_choice == "00":
             in_package_menu = False
             return None
