@@ -1,6 +1,4 @@
-import json
-from api_request import send_api_request, get_family
-from auth_helper import AuthInstance
+from api_request import get_family
 from ui import (
     clear_screen,
     show_package_details,
@@ -13,9 +11,7 @@ from ui import (
 )
 try:
     from rich.table import Table
-    from rich.panel import Panel
     from rich.prompt import Prompt
-    from rich.align import Align
     from rich.box import ROUNDED
 except ImportError:
     pass
