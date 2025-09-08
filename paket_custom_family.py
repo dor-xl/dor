@@ -50,6 +50,11 @@ def get_packages_by_family(family_code: str):
 
         if RICH_OK:
             panel_title = f"[{_c('text_title')}]Family Name:[/] [{_c('text_ok')}]{family_name}[/{_c('text_ok')}]"
+            _print_full_width_panel(
+                panel_title,
+                border_style=_c("border_info"),
+                box=ROUNDED
+            )
             console.print(Align.center(Panel(panel_title, style=_c("border_info"), box=ROUNDED)))
             table = Table(
                 title=f"[{_c('text_title')}]Paket Tersedia[/]", show_header=True,
