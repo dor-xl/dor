@@ -99,8 +99,8 @@ def get_packages_by_family(family_code: str):
 
         if RICH_OK:
             table.add_row("00", f"[{_c('text_err')}]Kembali ke menu sebelumnya[/]", "")
-            panel = Panel(
-                Align.center(table),
+            _print_full_width_anel(
+                table,
                 title=f"[{_c('text_title')}]Daftar Paket Family[/]",
                 border_style=_c("border_info"),
                 box=ROUNDED
